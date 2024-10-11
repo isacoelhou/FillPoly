@@ -2,6 +2,7 @@ class Poly {
     constructor() {
       this.points = [];
       this.color = '#000';
+      this.isSelected = false;
     }
   
     addPoint(x, y) {
@@ -9,39 +10,37 @@ class Poly {
     }
   
     draw(ctx) {
-      if (this.points.length < 3) {
-        alert("É necessário selecionar pelo menos 3 pontos para criar um polígono.");
-        return;
-      }
-  
-      ctx.strokeStyle = this.color;
+      ctx.strokeStyle = this.isSelected ? '#f00' : this.color; 
       ctx.lineWidth = 5;
   
-      ctx.beginPath();
-      ctx.moveTo(this.points[0].x, this.points[0].y);
+      if (this.points.length >= 3) {
+        ctx.beginPath();
+        ctx.moveTo(this.points[0].x, this.points[0].y);
   
-      for (let i = 1; i < this.points.length; i++) {
-        ctx.lineTo(this.points[i].x, this.points[i].y);
+        for (let i = 1; i < this.points.length; i++) {
+          ctx.lineTo(this.points[i].x, this.points[i].y);
+        }
+  
+        ctx.closePath();
+        ctx.stroke();
+      }
+    }
+  
+    containsPoint(x, y) {
+      let inside = false;
+      let j = this.points.length - 1;
+  
+      for (let i = 0; i < this.points.length; j = i++) {
+        const xi = this.points[i].x, yi = this.points[i].y;
+        const xj = this.points[j].x, yj = this.points[j].y;
+  
+        const intersect = ((yi > y) !== (yj > y)) &&
+          (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
+  
+        if (intersect) inside = !inside;
       }
   
-      ctx.closePath();
-      ctx.stroke();
-    }
-  
-    delete(index, polygons, deleteButtonsContainer, redrawPolygons) {
-      console.log(`Apagando polígono ${index + 1}`);
-      polygons.splice(index, 1);
-      deleteButtonsContainer.innerHTML = ''; 
-      polygons.forEach((_, idx) => this.addDeleteButton(idx, polygons, deleteButtonsContainer, redrawPolygons)); 
-      redrawPolygons(); 
-    }
-  
-    addDeleteButton(index, polygons, deleteButtonsContainer, redrawPolygons) {
-      const button = document.createElement('button');
-      button.textContent = `Apagar Polígono ${index + 1}`;
-      
-      button.addEventListener('click', () => this.delete(index, polygons, deleteButtonsContainer, redrawPolygons));
-      deleteButtonsContainer.appendChild(button);
+      return inside;
     }
   }
   

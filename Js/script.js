@@ -1,28 +1,54 @@
 document.addEventListener('DOMContentLoaded', (event) => {
     const canvas = document.getElementById('canvas');
     const ctx = canvas.getContext('2d');
-    const createButton = document.getElementById('create');
+    const deleteButton = document.getElementById('delete');
     const clearButton = document.getElementById('clear');
-    const deleteButtonsContainer = document.getElementById('delete-buttons'); 
   
     let currentPoly = new Poly(); 
     let polygons = [];
+    let selectedPolygon = null;
   
     function registerPoint(event) {
-      console.log(`Ponto registrado: (${event.offsetX}, ${event.offsetY})`);
-      currentPoly.addPoint(event.offsetX, event.offsetY);
+      if (!selectedPolygon) {
+        currentPoly.addPoint(event.offsetX, event.offsetY);
+      }
     }
   
     function createPolygon() {
       if (currentPoly.points.length >= 3) {
-        console.log('Criando polígono');
-        currentPoly.draw(ctx);  
-        polygons.push(currentPoly); 
-        currentPoly.addDeleteButton(polygons.length - 1, polygons, deleteButtonsContainer, redrawPolygons); 
-  
-        currentPoly = new Poly();   
+        currentPoly.draw(ctx);
+        polygons.push(currentPoly);
+        currentPoly = new Poly();
       } else {
         alert("Selecione pelo menos 3 pontos para formar um polígono.");
+      }
+    }
+  
+    function selectPolygon(event) {
+      const mouseX = event.offsetX;
+      const mouseY = event.offsetY;
+  
+      selectedPolygon = null;
+      polygons.forEach(poly => poly.isSelected = false); 
+
+      for (let i = 0; i < polygons.length; i++) {
+        if (polygons[i].containsPoint(mouseX, mouseY)) {
+          selectedPolygon = polygons[i];
+          selectedPolygon.isSelected = true; 
+          break;
+        }
+      }
+  
+      redrawPolygons();
+    }
+  
+    function deleteSelectedPolygon() {
+      if (selectedPolygon) {
+        polygons = polygons.filter(poly => poly !== selectedPolygon); 
+        selectedPolygon = null;
+        redrawPolygons();
+      } else {
+        alert("Nenhum polígono selecionado.");
       }
     }
   
@@ -32,15 +58,16 @@ document.addEventListener('DOMContentLoaded', (event) => {
     }
   
     function clearCanvas() {
-      console.log('Limpando tela');
-      ctx.clearRect(0, 0, canvas.width, canvas.height); 
-      polygons = []; 
-      currentPoly = new Poly();  
-      deleteButtonsContainer.innerHTML = ''; 
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      polygons = [];
+      currentPoly = new Poly();
+      selectedPolygon = null;
     }
   
     canvas.addEventListener('mousedown', registerPoint);
-    createButton.addEventListener('click', createPolygon);
+    canvas.addEventListener('click', selectPolygon); 
+    document.getElementById('create').addEventListener('click', createPolygon);
+    deleteButton.addEventListener('click', deleteSelectedPolygon); 
     clearButton.addEventListener('click', clearCanvas);
   });
   
