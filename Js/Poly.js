@@ -1,7 +1,7 @@
 class Poly {
     constructor() {
       this.points = [];
-      this.color = '#000';
+      this.color = '#FFFF00';
       this.isSelected = false;
     }
   
