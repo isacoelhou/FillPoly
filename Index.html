@@ -3,24 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tela de Desenho</title>
-  <style>
-    canvas {
-      border: 1px solid black;
-      cursor: crosshair;
-    }
-  </style>
+  <link rel="stylesheet" href="Css/Style.css">
+  <script src="./Js/Util/Poly.js"></script>
+  <script src="./Js/main.js"></script>
+  <title>Fill Poly</title>
 </head>
 <body>
-  <h1>Tela de Desenho</h1>
-  <canvas id="canvas" width="800" height="600"></canvas>
-  <input type="color" id="colorcreate" value="#FFFF00"/>
-  <button type="button" id="create">Criar Polígono</button>
-  <button type="button" id="clear">Limpar Tela</button>
-  <button type="button" id="delete">Delete</button>
-  <input type="color" id="color"/>
-  <button type="submit" id="changecolor">Mudar cor</button>
-  <script src="./Js/Poly.js"></script>
-  <script src="./Js/script.js"></script>
+  <h1>Fill Poly</h1>
+  <div class="container">
+    <canvas id="canvas" width="800" height="600"></canvas>
+    <div class="controls">
+      <input type="color" id="colorcreate" value="#FFFF00"/>
+      <button type="button" id="create">Criar Polígono (selecione uma cor acima)</button>
+      <button type="button" id="clear">Limpar Tela</button>
+      <button type="button" id="delete">Deletar polígono selecionado</button>
+      <button type="submit" id="changecolor">Mudar cor  (selecione uma cor abaixo)</button>
+      <input type="color" id="color"/>
+    </div>
+  </div>
 </body>
 </html>
