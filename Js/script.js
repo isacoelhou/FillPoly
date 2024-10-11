@@ -4,7 +4,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
     const deleteButton = document.getElementById('delete');
     const clearButton = document.getElementById('clear');
     const colorButton = document.getElementById('changecolor'); 
-    const colorInput = document.getElementById('color');
+    const newcolor = document.getElementById('color');
+    const color = document.getElementById('colorcreate');
     const changeColorButton = document.getElementById('changecolor'); 
     document.getElementById('create').addEventListener('click', createPolygon);    
   
@@ -20,10 +21,10 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     function createPolygon() {
         if (currentPoly.points.length >= 3) {
+            currentPoly.color = color.value;
             currentPoly.draw(ctx);
             polygons.push(currentPoly);
             currentPoly = new Poly();
-            //perguntar aqui se o user deseja escolher a cor do poligono ou não
         } else {
             alert("Selecione pelo menos 3 pontos para formar um polígono.");
         }
@@ -59,9 +60,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     function changeColor() {
         if (selectedPolygon) {
-            const selectedColor = colorInput.value;
-            selectedPolygon.color = colorInput.value; 
-            redrawPolygons(); // Redesenha os polígonos
+            const selectedColor = newcolor.value;
+            selectedPolygon.color = newcolor.value; 
+            redrawPolygons(); 
         } else {
             alert("Nenhum polígono selecionado.");
         }
@@ -84,6 +85,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
     clearButton.addEventListener('click', clearCanvas);
     changeColorButton.addEventListener('click', changeColor); 
     canvas.addEventListener('mousedown', registerPoint);
-    canvas.addEventListener('click', selectPolygon); 
+    canvas.addEventListener('dblclick', selectPolygon); 
 
 });

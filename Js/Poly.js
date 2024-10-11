@@ -1,4 +1,5 @@
 class Poly {
+    
     constructor() {
       this.points = [];
       this.color = '#FFFF00';
@@ -27,6 +28,7 @@ class Poly {
     }
   
     containsPoint(x, y) {
+      const tolerance = 5;
       let inside = false;
       let j = this.points.length - 1;
   
