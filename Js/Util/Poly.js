@@ -44,5 +44,13 @@ class Poly {
   
       return inside;
     }
+
+    fillpoly() {
+      const N_scanlines = this.points.map(point => point.y);
+      const ymin = Math.min(...yValues);
+      const ymax = Math.max(...yValues);
+      return ymax - ymin;
+    }
   }
+  
   
