@@ -22,7 +22,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
     function createPolygon() {
         if (currentPoly.points.length >= 3) {
             currentPoly.color = color.value;
-            currentPoly.draw(ctx);
+            currentPoly.cria_arestas()
+            currentPoly.fillpoly(ctx);
             polygons.push(currentPoly);
             currentPoly = new Poly();
         } else {
@@ -33,36 +34,41 @@ document.addEventListener('DOMContentLoaded', (event) => {
     function selectPolygon(event) {
         const mouseX = event.offsetX;
         const mouseY = event.offsetY;
-        
+    
         selectedPolygon = null;
-        polygons.forEach(poly => poly.isSelected = false); 
-        
-        for (let i = 0; i < polygons.length; i++) {
+        polygons.forEach(poly => poly.isSelected = false);  
+    
+        for (let i = polygons.length - 1; i >= 0; i--) {
             if (polygons[i].containsPoint(mouseX, mouseY)) {
-                selectedPolygon = polygons[i];
-                selectedPolygon.isSelected = true; 
-                break;
+                selectedPolygon = polygons[i]; 
+                selectedPolygon.isSelected = true;
+                
+                break; 
             }
         }
-        
-        redrawPolygons();
+    
+        redrawPolygons();  
     }
 
     function deleteSelectedPolygon() {
         if (selectedPolygon) {
-            polygons = polygons.filter(poly => poly !== selectedPolygon); 
-            selectedPolygon = null;
-            redrawPolygons();
+            polygons = polygons.filter(poly => poly !== selectedPolygon);  
+            selectedPolygon = null; 
+            redrawPolygons();  
         } else {
             alert("Nenhum polígono selecionado.");
         }
-    }   
+    }
+
+
 
     function changeColor() {
         if (selectedPolygon) {
-            const selectedColor = newcolor.value;
             selectedPolygon.color = newcolor.value; 
-            redrawPolygons(); 
+            polygons.forEach((p) => {
+                p.fillpoly(ctx);
+                p.isSelected = false
+            });
         } else {
             alert("Nenhum polígono selecionado.");
         }
@@ -70,7 +76,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     function redrawPolygons() {
         ctx.clearRect(0, 0, canvas.width, canvas.height); 
-        polygons.forEach(poly => poly.draw(ctx)); 
+        polygons.forEach((p) => {
+            p.fillpoly(ctx);
+        }); 
     }
     
     function clearCanvas() {

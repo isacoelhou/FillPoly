@@ -4,53 +4,104 @@ class Poly {
       this.points = [];
       this.color = '#FFFF00';
       this.isSelected = false;
+      this.arestas = [];
+      this.inters = [];
     }
   
     addPoint(x, y) {
       this.points.push({ x, y });
     }
   
-    draw(ctx) {
-      ctx.strokeStyle = this.isSelected ? '#f00' : this.color; 
-      ctx.lineWidth = 5;
-  
-      if (this.points.length >= 3) {
-        ctx.beginPath();
-        ctx.moveTo(this.points[0].x, this.points[0].y);
-  
-        for (let i = 1; i < this.points.length; i++) {
-          ctx.lineTo(this.points[i].x, this.points[i].y);
-        }
-  
-        ctx.closePath();
-        ctx.stroke();
-      }
-    }
-  
     containsPoint(x, y) {
-      const tolerance = 5;
       let inside = false;
-      let j = this.points.length - 1;
+      let j = this.points.length - 1;  
   
-      for (let i = 0; i < this.points.length; j = i++) {
-        const xi = this.points[i].x, yi = this.points[i].y;
-        const xj = this.points[j].x, yj = this.points[j].y;
+
+      for (let i = 0; i < this.points.length; i++) {
+          const xi = this.points[i].x, yi = this.points[i].y;
+          const xj = this.points[j].x, yj = this.points[j].y;
   
-        const intersect = ((yi > y) !== (yj > y)) &&
-          (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
+
+          const intersect = ((yi > y) !== (yj > y)) &&
+                            (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
+          
+          if (intersect) {
+              inside = !inside;  
+          }
   
-        if (intersect) inside = !inside;
+          j = i; 
       }
   
-      return inside;
-    }
+      return inside;  
+  }
+  
+  
 
-    fillpoly() {
-      const N_scanlines = this.points.map(point => point.y);
-      const ymin = Math.min(...yValues);
-      const ymax = Math.max(...yValues);
-      return ymax - ymin;
+    addAresta(x1, y1, x2, y2){  
+      this.arestas.push({ x1, y1, x2, y2 });
     }
+  
+    cria_arestas() {
+      this.points.forEach((point, i) => {
+        const nextPoint = this.points[(i + 1) % this.points.length];
+        this.addAresta(point.x, point.y, nextPoint.x, nextPoint.y);
+      });
+    }
+    
+    swap_arestas(i) {
+      [this.arestas[i].x1, this.arestas[i].x2] = [this.arestas[i].x2, this.arestas[i].x1];
+      [this.arestas[i].y1, this.arestas[i].y2] = [this.arestas[i].y2, this.arestas[i].y1];
+    }
+  
+    draw(line, y, context) {
+      context.strokeStyle = this.color;  
+      context.lineWidth = 1;             
+      
+      for (let i = 0; i < line.length; i += 2) {
+          const xStart = Math.ceil(line[i]);
+          const xEnd = Math.floor(line[i + 1]);
+          console.log(`Drawing line from (${xStart}, ${y}) to (${xEnd}, ${y})`);
+          
+          if (xStart <= xEnd) { 
+              context.beginPath();
+              context.moveTo(xStart, y);
+              context.lineTo(xEnd, y);
+              context.stroke();  
+          }
+      }
+  }
+  
+    
+  
+    fillpoly(ctx) {
+      const ymin = Math.min(...this.points.map(p => p.y));
+      const ymax = Math.max(...this.points.map(p => p.y));
+      
+      this.inters = Array.from({ length: ymax - ymin }, () => []); 
+  
+      this.arestas.forEach((aresta, i) => {
+          if (aresta.y1 === aresta.y2) return; 
+          if (aresta.y1 > aresta.y2) this.swap_arestas(i);
+  
+          const { x1, y1, x2, y2 } = this.arestas[i];
+          const coeficiente = (x2 - x1) / (y2 - y1);
+  
+          let x = x1;
+          let index = Math.floor(y1 - ymin);
+  
+          for (let y = y1; y < y2; y++) {
+              this.inters[index++].push(x);
+              x += coeficiente;
+          }
+      });
+  
+      this.inters.forEach((line, idx) => {
+          line.sort((a, b) => a - b);
+          console.log("Drawing at y: ", ymin + idx);
+          this.draw(line, ymin + idx, ctx);  
+      });
+  }
+  
   }
   
   
