@@ -1,12 +1,14 @@
 class Poly {
     
     constructor() {
-      this.points = [];
-      this.color = '#FFFF00';
-      this.isSelected = false;
-      this.arestas = [];
-      this.inters = [];
-    }
+        this.points = [];
+        this.color = "rgb(255, 255, 0)"; // Cor em formato de string
+        this.isSelected = false;
+        this.arestas = [];
+        this.inters = [];
+        this.arestacolor = "rgb(255, 255, 0)"; // Cor em formato de string
+      }
+    
   
     addPoint(x, y) {
       this.points.push({ x, y });
