@@ -15,9 +15,12 @@
     <div class="controls">
       <input type="color" id="colorcreate" value="#FFFF00"/>
       <button type="button" id="create">Criar Polígono (selecione uma cor acima)</button>
-      <label for="arestacolor">Cor da aresta:</label>
-      <input type="color" id="arestacolor" value="#FFFF00"/>
-            <button type="button" id="clear">Limpar Tela</button>
+      <label for="arestacolor">Aresta:</label>
+      <select id="arestacolor">
+        <option value="0">Sem aresta</option>
+        <option value="1">Com aresta</option>
+      </select>
+                  <button type="button" id="clear">Limpar Tela</button>
       <button type="button" id="delete">Deletar polígono selecionado</button>
       <button type="submit" id="changecolor">Mudar cor  (selecione uma cor abaixo)</button>
       <input type="color" id="color" value="#FFFF00"/>

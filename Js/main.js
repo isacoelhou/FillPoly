@@ -48,29 +48,33 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     function createPolygon() {
         if (currentPoly.points.length >= 3) {
-            currentPoly.arestacolor = hexToRgb(arestac.value); 
-            ctx.strokeStyle = currentPoly.arestacolor;
-            ctx.lineWidth = 5;
-            
-            ctx.beginPath();
-            ctx.moveTo(currentPoly.points[0].x, currentPoly.points[0].y);
-            for (let i = 1; i < currentPoly.points.length; i++) {
-                ctx.lineTo(currentPoly.points[i].x, currentPoly.points[i].y);
-            }
-            ctx.closePath();
-            ctx.stroke();
-            
+      
+            currentPoly.arestac = arestac.value;      
             currentPoly.color = hexToRgb(color.value); 
             currentPoly.cria_arestas();
             currentPoly.fillpoly(ctx); 
-    
+            
             polygons.push(currentPoly); 
-    
+
+            if (arestac.value == 1) {
+                currentPoly.arestacolor = "rgb(255, 255, 0)";  
+                ctx.strokeStyle = currentPoly.arestacolor; 
+                ctx.lineWidth = 5;
+                
+                ctx.beginPath();
+                ctx.moveTo(currentPoly.points[0].x, currentPoly.points[0].y);
+                for (let i = 1; i < currentPoly.points.length; i++) {
+                    ctx.lineTo(currentPoly.points[i].x, currentPoly.points[i].y);
+                }
+                ctx.closePath();
+                ctx.stroke();
+            }
             currentPoly = new Poly();
         } else {
             alert("Selecione pelo menos 3 pontos para formar um polígono.");
         }
     }
+    
     
     
     function selectPolygon(event) {
@@ -115,20 +119,23 @@ document.addEventListener('DOMContentLoaded', (event) => {
         ctx.clearRect(0, 0, canvas.width, canvas.height); 
     
         polygons.forEach((p) => {
-            ctx.strokeStyle = p.arestacolor; 
-            ctx.lineWidth = 5;
-            ctx.beginPath();
             let copy = new Poly();
             copy = p;
             p = null;
-            ctx.moveTo(copy.points[0].x, copy.points[0].y);
-            for (let i = 1; i < copy.points.length; i++) {
-                ctx.lineTo(copy.points[i].x, copy.points[i].y);
-            }
-            ctx.closePath();
-            ctx.stroke();
     
             copy.fillpoly(ctx);
+    
+            if (copy.arestac == 1) {
+                ctx.strokeStyle = copy.arestacolor; 
+                ctx.lineWidth = 5;
+                ctx.beginPath();
+                ctx.moveTo(copy.points[0].x, copy.points[0].y);
+                for (let i = 1; i < copy.points.length; i++) {
+                    ctx.lineTo(copy.points[i].x, copy.points[i].y);
+                }
+                ctx.closePath();
+                ctx.stroke();
+            }
         });
     }
     

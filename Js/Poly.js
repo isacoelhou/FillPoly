@@ -6,7 +6,7 @@ class Poly {
         this.isSelected = false;
         this.arestas = [];
         this.inters = [];
-        this.arestacolor = "rgb(255, 255, 0)"; 
+        this.arestac = 0;
       }
   
     addPoint(x, y) {
