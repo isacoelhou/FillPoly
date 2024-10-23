@@ -29,17 +29,13 @@ document.addEventListener('DOMContentLoaded', (event) => {
     }
 
     function hexToRgb(hex) {
-        if (typeof hex !== 'string') {
-            console.error("Invalid hex value:", hex);
+        if (typeof hex !== 'string') 
             return null;
-        }
-        
+                
         hex = hex.replace(/^#/, '');
     
-        if (hex.length !== 6) {
-            console.error("Invalid hex format:", hex);
+        if (hex.length !== 6) 
             return null;
-        }
     
         let bigint = parseInt(hex, 16);
         let r = (bigint >> 16) & 255;
@@ -78,8 +74,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     
     
     function selectPolygon(event) {
-        currentPoly = null;
-        currentPoly = new Poly();
+
         const mouseX = event.offsetX;
         const mouseY = event.offsetY;
     
@@ -93,7 +88,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
                 break; 
             }
         }
-        }
+    }
 
     function deleteSelectedPolygon() {
         if (selectedPolygon) {
