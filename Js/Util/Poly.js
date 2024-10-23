@@ -2,13 +2,12 @@ class Poly {
     
     constructor() {
         this.points = [];
-        this.color = "rgb(255, 255, 0)"; // Cor em formato de string
+        this.color = "rgb(255, 255, 0)"; 
         this.isSelected = false;
         this.arestas = [];
         this.inters = [];
-        this.arestacolor = "rgb(255, 255, 0)"; // Cor em formato de string
+        this.arestacolor = "rgb(255, 255, 0)"; 
       }
-    
   
     addPoint(x, y) {
       this.points.push({ x, y });
@@ -22,14 +21,11 @@ class Poly {
       for (let i = 0; i < this.points.length; i++) {
           const xi = this.points[i].x, yi = this.points[i].y;
           const xj = this.points[j].x, yj = this.points[j].y;
-  
-
-          const intersect = ((yi > y) !== (yj > y)) &&
-                            (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
           
-          if (intersect) {
-              inside = !inside;  
-          }
+          const intersect = ((yi > y) !== (yj > y)) && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
+          
+          if (intersect)
+            inside = !inside;  
   
           j = i; 
       }
@@ -37,8 +33,6 @@ class Poly {
       return inside;  
   }
   
-  
-
     addAresta(x1, y1, x2, y2){  
       this.arestas.push({ x1, y1, x2, y2 });
     }
@@ -56,24 +50,17 @@ class Poly {
     }
   
     draw(line, y, context) {
-      context.strokeStyle = this.color;  
-      context.lineWidth = 1;             
-      
+      context.fillStyle = this.color; 
+  
       for (let i = 0; i < line.length; i += 2) {
-          const xStart = Math.ceil(line[i]);
-          const xEnd = Math.floor(line[i + 1]);
-          console.log(`Drawing line from (${xStart}, ${y}) to (${xEnd}, ${y})`);
+          const x1 = Math.ceil(line[i]);
+          const x2 = Math.floor(line[i + 1]);
           
-          if (xStart <= xEnd) { 
-              context.beginPath();
-              context.moveTo(xStart, y);
-              context.lineTo(xEnd, y);
-              context.stroke();  
+          for (let x = x1; x <= x2; x++) { 
+              context.fillRect(x, y, 1, 1); 
           }
       }
   }
-  
-    
   
     fillpoly(ctx) {
       const ymin = Math.min(...this.points.map(p => p.y));
@@ -97,13 +84,10 @@ class Poly {
           }
       });
   
-      this.inters.forEach((line, idx) => {
+      this.inters.forEach((line, i) => {
           line.sort((a, b) => a - b);
-          console.log("Drawing at y: ", ymin + idx);
-          this.draw(line, ymin + idx, ctx);  
+          this.draw(line, ymin + i, ctx);  
       });
   }
   
-  }
-  
-  
+} 

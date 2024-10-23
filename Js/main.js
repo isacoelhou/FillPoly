@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     
             currentPoly.addPoint(x, y);
     
-            ctx.fillStyle = 'arestac';  
+            ctx.fillStyle = 'black';  
             ctx.beginPath();
             ctx.arc(x, y, 3, 0, 2 * Math.PI);  
             ctx.fill();
@@ -78,6 +78,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
     
     
     function selectPolygon(event) {
+        currentPoly = null;
+        currentPoly = new Poly();
         const mouseX = event.offsetX;
         const mouseY = event.offsetY;
     
